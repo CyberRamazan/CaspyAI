@@ -3,6 +3,7 @@
 import { Activity, AlertCircle, Waves, Hexagon } from "lucide-react";
 import type { EcosystemAlert } from "@/lib/types";
 import { SEA_LEVEL_STATUS } from "@/lib/constants";
+import { useI18n } from "@/lib/i18n/I18nContext";
 
 interface MetricBarProps {
   activeIncidents: number;
@@ -11,8 +12,10 @@ interface MetricBarProps {
 }
 
 function alertColor(alert: EcosystemAlert): string {
-  if (alert === "Rose") return "text-rose-300 border-rose-500/40 shadow-[0_0_16px_rgba(244,63,94,0.2)]";
-  if (alert === "Amber") return "text-amber-300 border-amber-500/40 shadow-[0_0_16px_rgba(245,158,11,0.2)]";
+  if (alert === "Rose")
+    return "text-rose-300 border-rose-500/40 shadow-[0_0_16px_rgba(244,63,94,0.2)]";
+  if (alert === "Amber")
+    return "text-amber-300 border-amber-500/40 shadow-[0_0_16px_rgba(245,158,11,0.2)]";
   return "text-emerald-300 border-emerald-500/40";
 }
 
@@ -21,33 +24,35 @@ export default function MetricBar({
   riskAreaSqKm,
   ecosystemAlert,
 }: MetricBarProps) {
+  const { t } = useI18n();
+
   const metrics = [
     {
       key: "incidents",
       icon: Activity,
       iconClass: "text-emerald-400",
-      text: `Active Incidents: ${activeIncidents}`,
+      text: `${t.dashboard.activeIncidents}: ${activeIncidents}`,
       cardClass: "border-slate-800/90",
     },
     {
       key: "risk",
       icon: Hexagon,
       iconClass: "text-amber-400",
-      text: `Risk Area: ${riskAreaSqKm.toLocaleString()} sq km`,
+      text: `${t.dashboard.riskArea}: ${riskAreaSqKm.toLocaleString()} ${t.common.sqKm}`,
       cardClass: "border-slate-800/90",
     },
     {
       key: "sea",
       icon: Waves,
       iconClass: "text-sky-400",
-      text: `Sea Level Status: ${SEA_LEVEL_STATUS}`,
+      text: `${t.dashboard.seaLevel}: ${SEA_LEVEL_STATUS}`,
       cardClass: "border-slate-800/90",
     },
     {
       key: "alert",
       icon: AlertCircle,
       iconClass: "",
-      text: `Ecosystem Alert: ${ecosystemAlert}`,
+      text: `${t.dashboard.ecosystemAlert}: ${t.ecosystemAlerts[ecosystemAlert]}`,
       cardClass: alertColor(ecosystemAlert),
     },
   ];

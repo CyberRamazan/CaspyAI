@@ -3,7 +3,9 @@
 import { AnimatePresence, motion } from "framer-motion";
 import { Shield, Sparkles, X } from "lucide-react";
 import Image from "next/image";
+import LanguageSwitcher from "@/components/LanguageSwitcher";
 import { ROLE_OPTIONS, type UserRole } from "@/lib/auth/types";
+import { useI18n } from "@/lib/i18n/I18nContext";
 
 interface AuthModalProps {
   open: boolean;
@@ -18,6 +20,8 @@ export default function AuthModal({
   onSelectRole,
   onDemoLogin,
 }: AuthModalProps) {
+  const { t } = useI18n();
+
   return (
     <AnimatePresence>
       {open && (
@@ -29,7 +33,7 @@ export default function AuthModal({
         >
           <button
             type="button"
-            aria-label="Close authentication modal"
+            aria-label={t.auth.close}
             className="absolute inset-0 bg-slate-950/80 backdrop-blur-sm"
             onClick={onClose}
           />
@@ -60,54 +64,61 @@ export default function AuthModal({
                   </div>
                   <div>
                     <p className="text-xs uppercase tracking-[0.2em] text-cyan-400/80">
-                      Secure Access
+                      {t.auth.secureAccess}
                     </p>
                     <h2
                       id="auth-modal-title"
                       className="text-lg font-semibold text-slate-100"
                     >
-                      Select Operational Role
+                      {t.auth.title}
                     </h2>
                   </div>
                 </div>
-                <button
-                  type="button"
-                  onClick={onClose}
-                  className="rounded-lg border border-slate-800 p-1.5 text-slate-400 transition-colors hover:border-slate-700 hover:text-slate-200"
-                >
-                  <X className="h-4 w-4" />
-                </button>
+                <div className="flex items-center gap-2">
+                  <LanguageSwitcher size="sm" />
+                  <button
+                    type="button"
+                    onClick={onClose}
+                    aria-label={t.auth.close}
+                    className="rounded-lg border border-slate-800 p-1.5 text-slate-400 transition-colors hover:border-slate-700 hover:text-slate-200"
+                  >
+                    <X className="h-4 w-4" />
+                  </button>
+                </div>
               </div>
             </div>
 
             <div className="space-y-2 p-5">
-              {ROLE_OPTIONS.map((option) => (
-                <button
-                  key={option.role}
-                  type="button"
-                  onClick={() => onSelectRole(option.role)}
-                  className="group flex w-full items-start gap-3 rounded-xl border border-slate-800 bg-slate-900/50 px-4 py-3 text-left transition-all hover:border-cyan-500/40 hover:bg-slate-900 hover:shadow-[0_0_24px_rgba(34,211,238,0.1)]"
-                >
-                  <div className="mt-0.5 flex h-9 w-9 shrink-0 items-center justify-center rounded-lg border border-slate-700 bg-slate-950 text-cyan-300 transition-colors group-hover:border-cyan-500/40">
-                    <Shield className="h-4 w-4" />
-                  </div>
-                  <div className="min-w-0 flex-1">
-                    <div className="flex flex-wrap items-center gap-2">
-                      <span className="font-medium text-slate-100">
-                        {option.title}
-                      </span>
-                      <span
-                        className={`rounded-md border px-1.5 py-0.5 text-[10px] font-semibold uppercase tracking-wide ${option.badgeClass}`}
-                      >
-                        {option.badge}
-                      </span>
+              {ROLE_OPTIONS.map((option) => {
+                const copy = t.auth.roles[option.role];
+                return (
+                  <button
+                    key={option.role}
+                    type="button"
+                    onClick={() => onSelectRole(option.role)}
+                    className="group flex w-full items-start gap-3 rounded-xl border border-slate-800 bg-slate-900/50 px-4 py-3 text-left transition-all hover:border-cyan-500/40 hover:bg-slate-900 hover:shadow-[0_0_24px_rgba(34,211,238,0.1)]"
+                  >
+                    <div className="mt-0.5 flex h-9 w-9 shrink-0 items-center justify-center rounded-lg border border-slate-700 bg-slate-950 text-cyan-300 transition-colors group-hover:border-cyan-500/40">
+                      <Shield className="h-4 w-4" />
                     </div>
-                    <p className="mt-0.5 text-sm text-slate-400">
-                      {option.subtitle}
-                    </p>
-                  </div>
-                </button>
-              ))}
+                    <div className="min-w-0 flex-1">
+                      <div className="flex flex-wrap items-center gap-2">
+                        <span className="font-medium text-slate-100">
+                          {copy.title}
+                        </span>
+                        <span
+                          className={`rounded-md border px-1.5 py-0.5 text-[10px] font-semibold uppercase tracking-wide ${option.badgeClass}`}
+                        >
+                          {copy.badge}
+                        </span>
+                      </div>
+                      <p className="mt-0.5 text-sm text-slate-400">
+                        {copy.subtitle}
+                      </p>
+                    </div>
+                  </button>
+                );
+              })}
             </div>
 
             <div className="border-t border-slate-800 p-5">
@@ -117,10 +128,10 @@ export default function AuthModal({
                 className="flex w-full items-center justify-center gap-2 rounded-xl border border-emerald-500/40 bg-emerald-500/15 px-4 py-3 text-sm font-semibold text-emerald-300 transition-all hover:bg-emerald-500/25 hover:shadow-[0_0_28px_rgba(16,185,129,0.25)]"
               >
                 <Sparkles className="h-4 w-4" />
-                One-Click Demo Login
+                {t.auth.demoLogin}
               </button>
               <p className="mt-2 text-center text-xs text-slate-500">
-                Instant DCHS Operator access for pitches and walkthroughs.
+                {t.auth.demoHint}
               </p>
             </div>
           </motion.div>

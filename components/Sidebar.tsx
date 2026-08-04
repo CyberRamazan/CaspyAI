@@ -5,7 +5,9 @@ import { PanelLeftClose, PanelLeftOpen } from "lucide-react";
 import IncidentConfigurator from "@/components/IncidentConfigurator";
 import AIOutputCard from "@/components/AIOutputCard";
 import UserProfile from "@/components/UserProfile";
+import LanguageSwitcher from "@/components/LanguageSwitcher";
 import type { AuthUser } from "@/lib/auth/types";
+import { useI18n } from "@/lib/i18n/I18nContext";
 import type { EmergencyReport, IncidentConfig } from "@/lib/types";
 
 interface SidebarProps {
@@ -35,6 +37,8 @@ export default function Sidebar({
   user,
   onLogout,
 }: SidebarProps) {
+  const { t } = useI18n();
+
   return (
     <aside
       style={{ width: collapsed ? undefined : width }}
@@ -71,7 +75,7 @@ export default function Sidebar({
                   Caspy<span className="text-emerald-400">AI</span>
                 </h1>
                 <p className="truncate text-xs text-slate-500">
-                  Caspian Ecological Response
+                  {t.dashboard.tagline}
                 </p>
               </div>
             )}
@@ -80,8 +84,10 @@ export default function Sidebar({
           <button
             type="button"
             onClick={onToggleCollapse}
-            aria-label={collapsed ? "Expand sidebar" : "Collapse sidebar"}
-            title={collapsed ? "Expand menu" : "Collapse menu"}
+            aria-label={
+              collapsed ? t.common.expandSidebar : t.common.collapseSidebar
+            }
+            title={collapsed ? t.common.expandSidebar : t.common.collapseSidebar}
             className="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg border border-slate-800 bg-slate-900/80 text-slate-400 transition-colors hover:border-cyan-500/40 hover:text-cyan-300 max-md:hidden"
           >
             {collapsed ? (
@@ -93,26 +99,30 @@ export default function Sidebar({
         </div>
 
         {!collapsed && (
-          <div className="mt-3 inline-flex items-center gap-2 rounded-full border border-emerald-500/30 bg-emerald-500/10 px-3 py-1">
-            <span className="relative flex h-2 w-2">
-              <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-emerald-400 opacity-75" />
-              <span className="relative inline-flex h-2 w-2 rounded-full bg-emerald-400" />
-            </span>
-            <span className="text-xs font-medium text-emerald-300">
-              Live Monitoring Active
-            </span>
+          <div className="mt-3 flex flex-wrap items-center gap-2">
+            <div className="inline-flex items-center gap-2 rounded-full border border-emerald-500/30 bg-emerald-500/10 px-3 py-1">
+              <span className="relative flex h-2 w-2">
+                <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-emerald-400 opacity-75" />
+                <span className="relative inline-flex h-2 w-2 rounded-full bg-emerald-400" />
+              </span>
+              <span className="text-xs font-medium text-emerald-300">
+                {t.common.liveMonitoring}
+              </span>
+            </div>
+            <LanguageSwitcher size="sm" />
           </div>
         )}
 
         {collapsed && (
-          <div
-            className="mt-3 flex justify-center"
-            title="Live Monitoring Active"
-          >
-            <span className="relative flex h-2.5 w-2.5">
+          <div className="mt-3 flex flex-col items-center gap-2">
+            <span
+              className="relative flex h-2.5 w-2.5"
+              title={t.common.liveMonitoring}
+            >
               <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-emerald-400 opacity-75" />
               <span className="relative inline-flex h-2.5 w-2.5 rounded-full bg-emerald-400" />
             </span>
+            <LanguageSwitcher size="sm" />
           </div>
         )}
       </header>
@@ -138,7 +148,7 @@ export default function Sidebar({
             className="rounded-lg border border-slate-800 bg-slate-900/60 px-2 py-3 text-[10px] font-medium uppercase tracking-wider text-slate-400 hover:border-cyan-500/30 hover:text-cyan-300"
             style={{ writingMode: "vertical-rl" }}
           >
-            Expand Panel
+            {t.common.expandPanel}
           </button>
         </div>
       )}

@@ -1,8 +1,9 @@
 "use client";
 
 import type { IncidentConfig, IncidentType, WindDirection } from "@/lib/types";
-import { INCIDENT_TYPE_LABELS, WIND_DIRECTIONS } from "@/lib/constants";
+import { WIND_DIRECTIONS } from "@/lib/constants";
 import { Loader2, Sparkles } from "lucide-react";
+import { useI18n } from "@/lib/i18n/I18nContext";
 
 interface IncidentConfiguratorProps {
   config: IncidentConfig;
@@ -25,14 +26,16 @@ export default function IncidentConfigurator({
   isGenerating,
   canGenerate,
 }: IncidentConfiguratorProps) {
+  const { t } = useI18n();
+
   return (
     <section className="rounded-xl border border-slate-800 bg-slate-900/60 p-4 backdrop-blur-md">
       <h2 className="mb-3 text-xs font-semibold uppercase tracking-wider text-slate-400">
-        Incident Configurator
+        {t.dashboard.incidentConfigurator}
       </h2>
 
       <div className="mb-4 space-y-2">
-        <p className="text-sm text-slate-300">Incident Type</p>
+        <p className="text-sm text-slate-300">{t.dashboard.incidentType}</p>
         <div className="flex flex-col gap-2">
           {INCIDENT_TYPES.map((type) => {
             const selected = config.type === type;
@@ -47,7 +50,7 @@ export default function IncidentConfigurator({
                     : "border-slate-800 bg-slate-950/50 text-slate-300 hover:border-slate-700 hover:bg-slate-900"
                 }`}
               >
-                {INCIDENT_TYPE_LABELS[type]}
+                {t.incidentTypes[type]}
               </button>
             );
           })}
@@ -57,10 +60,10 @@ export default function IncidentConfigurator({
       <div className="mb-4">
         <div className="mb-2 flex items-center justify-between">
           <label htmlFor="radius-slider" className="text-sm text-slate-300">
-            Spread Area (km)
+            {t.dashboard.spreadArea}
           </label>
           <span className="rounded-md border border-slate-800 bg-slate-950 px-2 py-0.5 font-mono text-xs text-amber-300">
-            {config.radiusKm} km
+            {config.radiusKm} {t.common.km}
           </span>
         </div>
         <input
@@ -80,10 +83,10 @@ export default function IncidentConfigurator({
       <div className="mb-4">
         <div className="mb-2 flex items-center justify-between">
           <label htmlFor="wind-speed" className="text-sm text-slate-300">
-            Wind Speed (km/h)
+            {t.dashboard.windSpeed}
           </label>
           <span className="rounded-md border border-slate-800 bg-slate-950 px-2 py-0.5 font-mono text-xs text-slate-200">
-            {config.windSpeedKmh} km/h
+            {config.windSpeedKmh} {t.common.kmh}
           </span>
         </div>
         <input
@@ -101,7 +104,7 @@ export default function IncidentConfigurator({
       </div>
 
       <div className="mb-5">
-        <p className="mb-2 text-sm text-slate-300">Wind Direction</p>
+        <p className="mb-2 text-sm text-slate-300">{t.dashboard.windDirection}</p>
         <div className="grid grid-cols-4 gap-2">
           {WIND_DIRECTIONS.map((dir) => {
             const selected = config.windDirection === dir;
@@ -138,18 +141,18 @@ export default function IncidentConfigurator({
         {isGenerating ? (
           <>
             <Loader2 className="h-4 w-4 animate-spin" />
-            Generating Report…
+            {t.dashboard.generatingReport}
           </>
         ) : (
           <>
             <Sparkles className="h-4 w-4" />
-            Generate Emergency AI Report
+            {t.dashboard.generateReport}
           </>
         )}
       </button>
       {!canGenerate && (
         <p className="mt-2 text-center text-xs text-slate-500">
-          Click the map to set the incident epicenter first.
+          {t.dashboard.mapHint}
         </p>
       )}
     </section>

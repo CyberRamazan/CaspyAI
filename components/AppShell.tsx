@@ -6,11 +6,13 @@ import LandingPage from "@/components/LandingPage";
 import AuthModal from "@/components/AuthModal";
 import Dashboard from "@/components/Dashboard";
 import { useAuth } from "@/lib/auth/AuthContext";
+import { useI18n } from "@/lib/i18n/I18nContext";
 import type { UserRole } from "@/lib/auth/types";
 
 export default function AppShell() {
   const { user, isAuthenticated, isHydrated, login, demoLogin, logout } =
     useAuth();
+  const { t, isHydrated: i18nHydrated } = useI18n();
   const [authOpen, setAuthOpen] = useState(false);
 
   const handleLaunch = () => {
@@ -32,10 +34,10 @@ export default function AppShell() {
     setAuthOpen(false);
   };
 
-  if (!isHydrated) {
+  if (!isHydrated || !i18nHydrated) {
     return (
       <div className="flex h-dvh items-center justify-center bg-slate-950 text-sm text-slate-500">
-        Initializing CaspyAI…
+        {t.common.initializing}
       </div>
     );
   }

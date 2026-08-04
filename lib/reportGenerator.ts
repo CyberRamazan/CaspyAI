@@ -1,5 +1,5 @@
 import { area, circle } from "@turf/turf";
-import { INCIDENT_TYPE_LABELS } from "./constants";
+import type { Dictionary } from "@/lib/i18n/types";
 import type {
   EcosystemAlert,
   EmergencyReport,
@@ -42,78 +42,71 @@ function ecosystemFromSeverity(severity: SeverityLevel): EcosystemAlert {
   return "Emerald";
 }
 
-function containmentResources(config: IncidentConfig): string[] {
+function containmentResources(
+  config: IncidentConfig,
+  copy: Dictionary["report"]
+): string[] {
   const boomLength = Math.max(2, Math.round(config.radiusKm * 0.8));
-  const sorbentTons = Math.max(1, Math.round(config.radiusKm * 0.35 + config.windSpeedKmh * 0.05));
+  const sorbentTons = Math.max(
+    1,
+    Math.round(config.radiusKm * 0.35 + config.windSpeedKmh * 0.05)
+  );
 
   switch (config.type) {
     case "oil_spill":
-      return [
-        `${boomLength} km of offshore containment booms`,
-        `${sorbentTons} tons of oleophilic sorbent materials`,
-        "2–4 mechanical skimmer vessels (Aktau Port staging)",
-        "Aerial dispersant assessment team (weather-dependent)",
-        "Shoreline clean-up crews for Mangystau coastal segments",
-      ];
+      return copy.resources.oil(boomLength, sorbentTons);
     case "plastic_waste":
-      return [
-        "Surface collection nets and debris intercept barriers",
-        "Harbor patrol craft for nearshore recovery lanes",
-        "Waste segregation staging at Aktau Port facilities",
-        "UAV survey packages for floating debris density mapping",
-        "Municipal haul trucks for recovered material transport",
-      ];
+      return copy.resources.plastic;
     case "fauna_threat":
-      return [
-        "Marine mammal rescue kits and thermal blankets",
-        "Quiet-zone marker buoys around haul-out sites",
-        "Veterinary response unit (Caspian seal specialists)",
-        "Low-noise patrol craft for perimeter enforcement",
-        "Satellite telemetry tags for post-incident monitoring",
-      ];
+      return copy.resources.fauna;
   }
 }
 
-function sealProtectionSteps(config: IncidentConfig): string[] {
+function sealProtectionSteps(
+  config: IncidentConfig,
+  copy: Dictionary["report"]
+): string[] {
   const bufferKm = Math.max(3, Math.round(config.radiusKm * 0.4));
-  return [
-    `Establish a ${bufferKm} km no-approach buffer around known Caspian seal haul-outs.`,
-    "Suspend non-essential vessel traffic through habitat corridors until containment is verified.",
-    "Deploy trained observers to document strandings and coordinate with rescue teams.",
-    "Redirect booming operations away from ice-edge and pupping zones when present.",
-    "Notify Ministry of Ecology wildlife desk and regional DCHS marine unit within 30 minutes.",
-  ];
+  return copy.sealSteps(bufferKm);
 }
 
 function buildOperationalReport(
   config: IncidentConfig,
   point: LatLngPoint,
   severity: SeverityLevel,
-  affectedAreaSqKm: number
+  affectedAreaSqKm: number,
+  t: Dictionary
 ): string {
-  const typeLabel = INCIDENT_TYPE_LABELS[config.type];
+  const typeLabel = t.incidentTypes[config.type];
+  const severityLabel = t.severity[severity];
   const driftNote =
     config.windSpeedKmh >= 20
-      ? `Prevailing winds from the ${config.windDirection} at ${config.windSpeedKmh} km/h indicate accelerated surface drift; prioritize downwind containment corridors.`
-      : `Moderate winds from the ${config.windDirection} at ${config.windSpeedKmh} km/h suggest manageable drift; maintain standard boom geometry.`;
+      ? t.report.driftHigh(config.windDirection, config.windSpeedKmh)
+      : t.report.driftLow(config.windDirection, config.windSpeedKmh);
 
   return [
-    `EMERGENCY OPERATIONAL BRIEF — CaspyAI Automated Assessment`,
-    ``,
-    `To: Department of Emergency Situations (DCHS), Mangystau Region; Ministry of Ecology and Natural Resources of the Republic of Kazakhstan`,
-    `Subject: ${severity} — ${typeLabel} near Aktau / Caspian coastal zone`,
-    ``,
-    `Incident coordinates: ${point.lat.toFixed(4)}°N, ${point.lng.toFixed(4)}°E. Estimated spread radius: ${config.radiusKm} km. Modelled affected marine/coastal area: ${affectedAreaSqKm} km².`,
-    ``,
-    `${driftNote} Immediate objectives: (1) confirm source and trajectory, (2) deploy containment assets from Aktau Port, (3) protect Caspian seal habitat sectors, (4) establish public safety and fisheries advisories for Mangystau coastal waters.`,
-    ``,
-    `Recommended command posture: activate regional incident command under DCHS with Ministry of Ecology environmental liaison. Stage logistics at Aktau Port; coordinate offshore awareness with operators near Kashagan where trajectories may intersect shipping lanes. Reassess within 2 hours as wind and sea-state update.`,
+    t.report.briefTitle,
+    "",
+    t.report.toLine,
+    t.report.subject(severityLabel, typeLabel),
+    "",
+    t.report.coordinates(
+      point.lat.toFixed(4),
+      point.lng.toFixed(4),
+      config.radiusKm,
+      affectedAreaSqKm
+    ),
+    "",
+    `${driftNote} ${t.report.objectives}`,
+    "",
+    t.report.command,
   ].join("\n");
 }
 
 export function generateEmergencyReport(
   config: IncidentConfig,
-  point: LatLngPoint
+  point: LatLngPoint,
+  t: Dictionary
 ): EmergencyReport {
   const severity = computeSeverity(config);
   const affectedAreaSqKm = computeAffectedAreaSqKm(point, config.radiusKm);
@@ -121,9 +114,15 @@ export function generateEmergencyReport(
   return {
     severity,
     affectedAreaSqKm,
-    operationalReport: buildOperationalReport(config, point, severity, affectedAreaSqKm),
-    containmentResources: containmentResources(config),
-    sealProtectionSteps: sealProtectionSteps(config),
+    operationalReport: buildOperationalReport(
+      config,
+      point,
+      severity,
+      affectedAreaSqKm,
+      t
+    ),
+    containmentResources: containmentResources(config, t.report),
+    sealProtectionSteps: sealProtectionSteps(config, t.report),
     ecosystemAlert: ecosystemFromSeverity(severity),
     generatedAt: new Date().toISOString(),
   };

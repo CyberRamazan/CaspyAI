@@ -30,7 +30,7 @@ export interface EmergencyReport {
 
 export interface MapMarkerDef {
   id: string;
-  name: string;
   position: [number, number];
-  description: string;
+  name?: string;
+  description?: string;
 }

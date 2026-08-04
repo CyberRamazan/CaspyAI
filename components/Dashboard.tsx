@@ -15,6 +15,7 @@ import {
   estimateAreaSqKm,
   generateEmergencyReport,
 } from "@/lib/reportGenerator";
+import { useI18n } from "@/lib/i18n/I18nContext";
 import type {
   EcosystemAlert,
   EmergencyReport,
@@ -23,13 +24,18 @@ import type {
 } from "@/lib/types";
 import type { AuthUser } from "@/lib/auth/types";
 
+function MapLoadingFallback() {
+  const { t } = useI18n();
+  return (
+    <div className="flex h-full min-h-[420px] flex-1 items-center justify-center bg-slate-950 text-sm text-slate-500">
+      {t.common.loadingMap}
+    </div>
+  );
+}
+
 const MapView = dynamic(() => import("@/components/MapView"), {
   ssr: false,
-  loading: () => (
-    <div className="flex h-full min-h-[420px] flex-1 items-center justify-center bg-slate-950 text-sm text-slate-500">
-      Loading Caspian operations map…
-    </div>
-  ),
+  loading: () => <MapLoadingFallback />,
 });
 
 const DEFAULT_SIDEBAR_WIDTH = 380;
@@ -43,6 +49,7 @@ interface DashboardProps {
 }
 
 export default function Dashboard({ user, onLogout }: DashboardProps) {
+  const { t, locale } = useI18n();
   const [config, setConfig] = useState<IncidentConfig>(DEFAULT_CONFIG);
   const [epicenter, setEpicenter] = useState<LatLngPoint | null>(null);
   const [report, setReport] = useState<EmergencyReport | null>(null);
@@ -66,10 +73,17 @@ export default function Dashboard({ user, onLogout }: DashboardProps) {
     if (!epicenter) return;
     setIsGenerating(true);
     await new Promise((resolve) => setTimeout(resolve, 800));
-    const next = generateEmergencyReport(config, epicenter);
+    const next = generateEmergencyReport(config, epicenter, t);
     setReport(next);
     setIsGenerating(false);
-  }, [config, epicenter]);
+  }, [config, epicenter, t]);
+
+  // Re-localize an existing report when language changes
+  useEffect(() => {
+    if (!epicenter || !report) return;
+    setReport(generateEmergencyReport(config, epicenter, t));
+    // eslint-disable-next-line react-hooks/exhaustive-deps -- only refresh copy on locale change
+  }, [locale]);
 
   const handleMapClick = useCallback((point: LatLngPoint) => {
     setEpicenter(point);
@@ -145,11 +159,10 @@ export default function Dashboard({ user, onLogout }: DashboardProps) {
           onLogout={onLogout}
         />
 
-        {/* Drag handle: expand right / shrink left */}
         <div
           role="separator"
           aria-orientation="vertical"
-          aria-label="Resize sidebar"
+          aria-label={t.dashboard.resizeSidebar}
           aria-valuenow={collapsed ? COLLAPSED_WIDTH : sidebarWidth}
           aria-valuemin={MIN_SIDEBAR_WIDTH}
           aria-valuemax={MAX_SIDEBAR_WIDTH}

@@ -11,39 +11,40 @@ import {
   Sparkles,
   Waves,
 } from "lucide-react";
+import LanguageSwitcher from "@/components/LanguageSwitcher";
+import { useI18n } from "@/lib/i18n/I18nContext";
 
 interface LandingPageProps {
   onLaunch: () => void;
 }
 
-const FEATURES = [
-  {
-    icon: Map,
-    title: "Interactive GIS Threat Modeling",
-    description:
-      "Place spill epicenters on the Caspian map and model expanding hazard zones with wind-aware spread analysis.",
-  },
-  {
-    icon: Sparkles,
-    title: "Automated AI Emergency Briefs",
-    description:
-      "Generate DCHS / Ministry-ready operational reports with severity, containment resources, and response posture.",
-  },
-  {
-    icon: Fish,
-    title: "Caspian Seal Fauna Protection",
-    description:
-      "Protect Pusa caspica habitats with buffer guidance, quiet-zone protocols, and wildlife liaison steps.",
-  },
-];
-
-const METRICS = [
-  { icon: Waves, label: "50,000 km² Monitored Area" },
-  { icon: Satellite, label: "Real-Time Satellite Sync" },
-  { icon: Radio, label: "0.8s AI Report Generation" },
-];
-
 export default function LandingPage({ onLaunch }: LandingPageProps) {
+  const { t } = useI18n();
+
+  const features = [
+    {
+      icon: Map,
+      title: t.landing.features.gis.title,
+      description: t.landing.features.gis.description,
+    },
+    {
+      icon: Sparkles,
+      title: t.landing.features.ai.title,
+      description: t.landing.features.ai.description,
+    },
+    {
+      icon: Fish,
+      title: t.landing.features.seal.title,
+      description: t.landing.features.seal.description,
+    },
+  ];
+
+  const metrics = [
+    { icon: Waves, label: t.landing.metrics.area },
+    { icon: Satellite, label: t.landing.metrics.satellite },
+    { icon: Radio, label: t.landing.metrics.reportSpeed },
+  ];
+
   return (
     <div className="relative min-h-dvh overflow-y-auto bg-slate-950 text-slate-100">
       <div className="pointer-events-none absolute inset-0">
@@ -60,7 +61,7 @@ export default function LandingPage({ onLaunch }: LandingPageProps) {
         />
       </div>
 
-      <header className="relative z-10 mx-auto flex w-full max-w-6xl items-center justify-between px-6 py-5">
+      <header className="relative z-10 mx-auto flex w-full max-w-6xl items-center justify-between gap-3 px-6 py-5">
         <div className="flex items-center gap-3">
           <div className="relative h-11 w-11 overflow-hidden rounded-full border border-cyan-500/30 shadow-[0_0_24px_rgba(34,211,238,0.25)]">
             <Image
@@ -76,13 +77,16 @@ export default function LandingPage({ onLaunch }: LandingPageProps) {
             Caspy<span className="text-emerald-400">AI</span>
           </span>
         </div>
-        <button
-          type="button"
-          onClick={onLaunch}
-          className="rounded-lg border border-slate-800 bg-slate-900/60 px-3 py-1.5 text-sm text-slate-300 transition-colors hover:border-cyan-500/40 hover:text-cyan-300"
-        >
-          Sign in
-        </button>
+        <div className="flex items-center gap-2 sm:gap-3">
+          <LanguageSwitcher />
+          <button
+            type="button"
+            onClick={onLaunch}
+            className="rounded-lg border border-slate-800 bg-slate-900/60 px-3 py-1.5 text-sm text-slate-300 transition-colors hover:border-cyan-500/40 hover:text-cyan-300"
+          >
+            {t.common.signIn}
+          </button>
+        </div>
       </header>
 
       <main className="relative z-10">
@@ -93,7 +97,7 @@ export default function LandingPage({ onLaunch }: LandingPageProps) {
             transition={{ duration: 0.55, ease: "easeOut" }}
             className="max-w-3xl"
           >
-            <div className="mb-8 flex items-center gap-4">
+            <div className="mb-8 flex flex-wrap items-center gap-4">
               <div className="relative h-24 w-24 overflow-hidden rounded-full border border-cyan-500/40 shadow-[0_0_48px_rgba(34,211,238,0.35)] md:h-28 md:w-28">
                 <Image
                   src="/logo.png"
@@ -110,7 +114,7 @@ export default function LandingPage({ onLaunch }: LandingPageProps) {
                   <span className="relative inline-flex h-2 w-2 rounded-full bg-emerald-400" />
                 </span>
                 <span className="text-xs font-medium text-emerald-300">
-                  Live Caspian Monitoring
+                  {t.landing.liveBadge}
                 </span>
               </div>
             </div>
@@ -119,8 +123,7 @@ export default function LandingPage({ onLaunch }: LandingPageProps) {
               Caspy<span className="text-emerald-400">AI</span>
             </h1>
             <p className="mt-5 max-w-2xl text-lg leading-relaxed text-slate-300 md:text-xl">
-              AI-Powered Ecological Intelligence & Emergency Response for the
-              Caspian Sea
+              {t.landing.subtitle}
             </p>
 
             <motion.button
@@ -130,7 +133,7 @@ export default function LandingPage({ onLaunch }: LandingPageProps) {
               whileTap={{ scale: 0.98 }}
               className="mt-8 inline-flex items-center gap-2 rounded-xl border border-cyan-500/40 bg-cyan-500/15 px-6 py-3.5 text-base font-semibold text-cyan-200 shadow-[0_0_32px_rgba(34,211,238,0.2)] transition-colors hover:bg-cyan-500/25"
             >
-              Launch Operations Center
+              {t.landing.launchCta}
               <ArrowRight className="h-5 w-5" />
             </motion.button>
           </motion.div>
@@ -141,7 +144,7 @@ export default function LandingPage({ onLaunch }: LandingPageProps) {
             transition={{ duration: 0.55, delay: 0.15, ease: "easeOut" }}
             className="mt-16 grid gap-8 border-t border-slate-800/80 pt-10 md:grid-cols-3"
           >
-            {FEATURES.map((feature, index) => {
+            {features.map((feature, index) => {
               const Icon = feature.icon;
               return (
                 <motion.div
@@ -172,7 +175,7 @@ export default function LandingPage({ onLaunch }: LandingPageProps) {
           className="border-y border-slate-800/80 bg-slate-900/40 backdrop-blur-md"
         >
           <div className="mx-auto flex w-full max-w-6xl flex-col gap-4 px-6 py-5 md:flex-row md:items-center md:justify-between">
-            {METRICS.map((metric) => {
+            {metrics.map((metric) => {
               const Icon = metric.icon;
               return (
                 <div
@@ -188,8 +191,7 @@ export default function LandingPage({ onLaunch }: LandingPageProps) {
         </motion.section>
 
         <footer className="mx-auto w-full max-w-6xl px-6 py-8 text-xs text-slate-500">
-          Caspian Sea Eco-Intelligence — Secure. Predict. Protect. · Aktau &
-          Mangystau coastal operations
+          {t.landing.footer}
         </footer>
       </main>
     </div>
