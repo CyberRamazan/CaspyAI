@@ -12,10 +12,44 @@ const geistMono = Geist_Mono({
   subsets: ["latin"],
 });
 
+const siteUrl = "https://caspy-ai.vercel.app";
+const title = "CaspyAI — Caspian Ecological Emergency Response";
+const description =
+  "Real-time ecological incident monitoring and emergency AI reporting for the Caspian Sea, Aktau, and Mangystau coastal region.";
+
 export const metadata: Metadata = {
-  title: "CaspyAI — Caspian Ecological Emergency Response",
-  description:
-    "Real-time ecological incident monitoring and emergency AI reporting for the Caspian Sea, Aktau, and Mangystau coastal region.",
+  metadataBase: new URL(siteUrl),
+  title,
+  description,
+  applicationName: "CaspyAI",
+  icons: {
+    icon: [{ url: "/logo.png", type: "image/png" }],
+    shortcut: ["/logo.png"],
+    apple: [{ url: "/logo.png" }],
+  },
+  openGraph: {
+    type: "website",
+    url: siteUrl,
+    siteName: "CaspyAI",
+    title,
+    description,
+    locale: "en_US",
+    images: [
+      {
+        url: "/logo.png",
+        width: 701,
+        height: 693,
+        alt: "CaspyAI — Caspian Sea Eco-Intelligence",
+        type: "image/png",
+      },
+    ],
+  },
+  twitter: {
+    card: "summary_large_image",
+    title,
+    description,
+    images: ["/logo.png"],
+  },
 };
 
 export default function RootLayout({ children }: LayoutProps<"/">) {

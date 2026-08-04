@@ -51,7 +51,7 @@ export default function Sidebar({
               }`}
             >
               <Image
-                src="/caspyai-logo.png"
+                src="/logo.png"
                 alt="CaspyAI"
                 fill
                 sizes="56px"
