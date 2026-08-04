@@ -21,6 +21,7 @@ import type {
   IncidentConfig,
   LatLngPoint,
 } from "@/lib/types";
+import type { AuthUser } from "@/lib/auth/types";
 
 const MapView = dynamic(() => import("@/components/MapView"), {
   ssr: false,
@@ -36,7 +37,12 @@ const MIN_SIDEBAR_WIDTH = 300;
 const MAX_SIDEBAR_WIDTH = 560;
 const COLLAPSED_WIDTH = 72;
 
-export default function Dashboard() {
+interface DashboardProps {
+  user: AuthUser;
+  onLogout: () => void;
+}
+
+export default function Dashboard({ user, onLogout }: DashboardProps) {
   const [config, setConfig] = useState<IncidentConfig>(DEFAULT_CONFIG);
   const [epicenter, setEpicenter] = useState<LatLngPoint | null>(null);
   const [report, setReport] = useState<EmergencyReport | null>(null);
@@ -135,6 +141,8 @@ export default function Dashboard() {
           width={sidebarWidth}
           collapsed={collapsed}
           onToggleCollapse={handleToggleCollapse}
+          user={user}
+          onLogout={onLogout}
         />
 
         {/* Drag handle: expand right / shrink left */}

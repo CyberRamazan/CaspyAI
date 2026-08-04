@@ -4,6 +4,8 @@ import Image from "next/image";
 import { PanelLeftClose, PanelLeftOpen } from "lucide-react";
 import IncidentConfigurator from "@/components/IncidentConfigurator";
 import AIOutputCard from "@/components/AIOutputCard";
+import UserProfile from "@/components/UserProfile";
+import type { AuthUser } from "@/lib/auth/types";
 import type { EmergencyReport, IncidentConfig } from "@/lib/types";
 
 interface SidebarProps {
@@ -16,6 +18,8 @@ interface SidebarProps {
   width: number;
   collapsed: boolean;
   onToggleCollapse: () => void;
+  user: AuthUser;
+  onLogout: () => void;
 }
 
 export default function Sidebar({
@@ -28,13 +32,15 @@ export default function Sidebar({
   width,
   collapsed,
   onToggleCollapse,
+  user,
+  onLogout,
 }: SidebarProps) {
   return (
     <aside
       style={{ width: collapsed ? undefined : width }}
       className={`relative flex h-full shrink-0 flex-col border-r border-slate-800 bg-slate-950 transition-[width] duration-200 ease-out ${
         collapsed ? "w-[72px]" : ""
-      } max-md:w-full max-md:max-h-[45vh]`}
+      } max-md:w-full max-md:max-h-[50vh]`}
     >
       <header
         className={`border-b border-slate-800 ${collapsed ? "px-2 py-3" : "px-4 py-3"}`}
@@ -43,7 +49,7 @@ export default function Sidebar({
           className={`flex ${collapsed ? "flex-col items-center gap-3" : "items-start justify-between gap-2"}`}
         >
           <div
-            className={`flex ${collapsed ? "flex-col items-center" : "items-center gap-3"} min-w-0`}
+            className={`flex min-w-0 ${collapsed ? "flex-col items-center" : "items-center gap-3"}`}
           >
             <div
               className={`relative shrink-0 overflow-hidden rounded-full border border-cyan-500/20 bg-slate-900 shadow-[0_0_24px_rgba(34,211,238,0.2)] ${
@@ -99,7 +105,10 @@ export default function Sidebar({
         )}
 
         {collapsed && (
-          <div className="mt-3 flex justify-center" title="Live Monitoring Active">
+          <div
+            className="mt-3 flex justify-center"
+            title="Live Monitoring Active"
+          >
             <span className="relative flex h-2.5 w-2.5">
               <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-emerald-400 opacity-75" />
               <span className="relative inline-flex h-2.5 w-2.5 rounded-full bg-emerald-400" />
@@ -133,6 +142,8 @@ export default function Sidebar({
           </button>
         </div>
       )}
+
+      <UserProfile user={user} onLogout={onLogout} collapsed={collapsed} />
     </aside>
   );
 }
