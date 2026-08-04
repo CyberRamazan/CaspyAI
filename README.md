@@ -1,36 +1,81 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# CaspyAI
 
-## Getting Started
+> **AI-Powered GIS Platform for Ecological Monitoring & Emergency Response in the Caspian Sea**
 
-First, run the development server:
+[![Live Demo]([https://img.shields.io/badge/Vercel-Live_Demo-000000?style=for-the-badge&logo=vercel&logoColor=white)](https://caspy-ai.vercel.app)](https://img.shields.io/badge/Vercel-Live_Demo-000000?style=for-the-badge&logo=vercel&logoColor=white)](https://caspy-ai.vercel.app))
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
+[![GitHub]([https://img.shields.io/badge/GitHub-Repository-181717?style=for-the-badge&logo=github&logoColor=white)](https://github.com/CyberRamazan/CaspyAI)](https://img.shields.io/badge/GitHub-Repository-181717?style=for-the-badge&logo=github&logoColor=white)](https://github.com/CyberRamazan/CaspyAI))
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Developed for **Caspian Hackathon 2026** by team **Cyber Nomads**.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+---
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+## 📌 Overview
 
-## Learn More
+**CaspyAI** is an intelligent digital situational operations center that combines Geographic Information Systems (GIS) with Artificial Intelligence to model, assess, and respond to environmental emergencies—such as offshore oil spills and pollution threats—in the Caspian Sea, with a primary focus on the Aktau and Mangystau coastal ecosystem.
 
-To learn more about Next.js, take a look at the following resources:
+### Key Features:
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+- 🗺️ **Interactive Caspian GIS Map:** Displays critical offshore assets, ports (e.g., Aktau Port, Kashagan field), and sensitive biodiversity habitats (Caspian seal haul-outs).
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+- 🎯 **Dynamic Hazard Simulation:** Real-time spatial impact calculation (surface area in sq. km) using `@turf/turf`, accounting for environmental parameters such as wind speed and direction.
 
-## Deploy on Vercel
+- ⚡ **AI Operational Brief Generation:** Automated generation of structured emergency briefs tailored for local disaster management (DCHS) and environmental protection agencies.
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+- 🦭 **Fauna Protection & Resource Allocation:** Automatic estimation of containment requirements (booms, sorbents) and actionable protocols for safeguarding endemic species.
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+- 📊 **Real-time Operational Metrics:** Live monitoring panel displaying active incident alerts, sea level tracking (-28.5m), and ecosystem risk status.
+
+---
+
+## 🛠 Tech Stack
+
+| Layer | Technologies |
+
+| :--- | :--- |
+
+| **Frontend** | Next.js (App Router), TypeScript, Tailwind CSS, Lucide Icons |
+
+| **GIS & Mapping** | React-Leaflet, Leaflet, `@turf/turf` (Spatial Analysis) |
+
+| **AI Integration** | Anthropic Claude API / OpenAI API |
+
+| **Infrastructure** | Vercel (CI/CD Production Deployment), GitHub |
+
+| **Dev Tools** | Cursor AI, Claude 3.5 Sonnet |
+
+---
+
+## 🚀 Getting Started
+
+### Prerequisites
+
+- Node.js 18.x or higher
+
+- npm / yarn / pnpm
+
+### Local Installation
+
+ **Clone the repository:**
+
+   ```bash
+
+   git clone [[https://github.com/CyberRamazan/CaspyAI.git](https://github.com/CyberRamazan/CaspyAI.git)](https://github.com/CyberRamazan/CaspyAI.git](https://github.com/CyberRamazan/CaspyAI.git))
+
+   cd CaspyAI
+
+##  Production Deployment
+
+The platform is live and deployed on Vercel:
+
+🔗 **[https://caspy-ai.vercel.app](https://caspy-ai.vercel.app)**
+
+## 👥 Team "Cyber Nomads"
+
+- **Ramazan Nurbergen** — Product Manager
+- **Tansholpan Abdipaiyz** — DevOps Engineer
+- **Bektursyn Zhukeshbayev** — Full-stack Developer
+- **Assiya Nurbergen** — UI/UX & Presenter
+- **Milana Yergaliyeva** — Product Analyst & Presenter
+
+*Caspian Sea Action Week 2026*
