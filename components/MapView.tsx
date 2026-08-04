@@ -7,6 +7,8 @@ import {
   Marker,
   Popup,
   useMapEvents,
+  useMap,
+  ZoomControl,
 } from "react-leaflet";
 import L from "leaflet";
 import "leaflet/dist/leaflet.css";
@@ -35,6 +37,20 @@ function MapClickHandler({
       onMapClick({ lat: e.latlng.lat, lng: e.latlng.lng });
     },
   });
+  return null;
+}
+
+function MapResizeFix() {
+  const map = useMap();
+  useEffect(() => {
+    const timer = window.setTimeout(() => map.invalidateSize(), 100);
+    const onResize = () => map.invalidateSize();
+    window.addEventListener("resize", onResize);
+    return () => {
+      window.clearTimeout(timer);
+      window.removeEventListener("resize", onResize);
+    };
+  }, [map]);
   return null;
 }
 
@@ -72,7 +88,7 @@ export default function MapView({
   }, []);
 
   return (
-    <div className="relative h-full min-h-[420px] w-full flex-1 bg-slate-950">
+    <div className="relative h-full min-h-0 w-full flex-1 bg-slate-950">
       <MetricBar
         activeIncidents={activeIncidents}
         riskAreaSqKm={riskAreaSqKm}
@@ -82,13 +98,15 @@ export default function MapView({
         center={AKTAU_CENTER}
         zoom={DEFAULT_ZOOM}
         className="h-full w-full"
-        zoomControl={true}
+        zoomControl={false}
         attributionControl={true}
       >
         <TileLayer
           attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> &copy; <a href="https://carto.com/attributions">CARTO</a>'
           url="https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png"
         />
+        <ZoomControl position="bottomright" />
+        <MapResizeFix />
         <MapClickHandler onMapClick={onMapClick} />
         {epicenter && <HazardZone center={epicenter} radiusKm={radiusKm} />}
         {MAP_MARKERS.map((marker) => {

@@ -59,6 +59,27 @@ body {
   background: #1e293b !important;
 }
 
+@media (max-width: 767px) {
+  .leaflet-bottom.leaflet-right {
+    margin-bottom: 12px;
+    margin-right: 8px;
+  }
+
+  .leaflet-control-attribution {
+    max-width: 55vw;
+    font-size: 9px !important;
+  }
+}
+
+.scrollbar-none {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+
+.scrollbar-none::-webkit-scrollbar {
+  display: none;
+}
+
 /* Pulsing red/orange hazard overlay */
 @keyframes hazard-pulse {
   0%,

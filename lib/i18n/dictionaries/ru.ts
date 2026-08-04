@@ -9,6 +9,8 @@ export const ru: Dictionary = {
     expandSidebar: "Развернуть меню",
     collapseSidebar: "Свернуть меню",
     expandPanel: "Развернуть панель",
+    openControls: "Панель",
+    closeControls: "Закрыть",
     liveMonitoring: "Мониторинг активен",
     km: "км",
     kmh: "км/ч",

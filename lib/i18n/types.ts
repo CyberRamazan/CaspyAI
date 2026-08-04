@@ -26,6 +26,8 @@ export interface Dictionary {
     expandSidebar: string;
     collapseSidebar: string;
     expandPanel: string;
+    openControls: string;
+    closeControls: string;
     liveMonitoring: string;
     km: string;
     kmh: string;

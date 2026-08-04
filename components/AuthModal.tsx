@@ -26,7 +26,7 @@ export default function AuthModal({
     <AnimatePresence>
       {open && (
         <motion.div
-          className="fixed inset-0 z-50 flex items-center justify-center p-4"
+          className="fixed inset-0 z-50 flex items-end justify-center p-0 sm:items-center sm:p-4"
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           exit={{ opacity: 0 }}
@@ -46,7 +46,7 @@ export default function AuthModal({
             animate={{ opacity: 1, y: 0, scale: 1 }}
             exit={{ opacity: 0, y: 16, scale: 0.96 }}
             transition={{ type: "spring", stiffness: 320, damping: 28 }}
-            className="relative z-10 w-full max-w-lg overflow-hidden rounded-2xl border border-slate-800 bg-slate-950/95 shadow-[0_0_60px_rgba(34,211,238,0.12)]"
+            className="relative z-10 flex max-h-[92dvh] w-full max-w-lg flex-col overflow-hidden rounded-t-2xl border border-slate-800 bg-slate-950/95 shadow-[0_0_60px_rgba(34,211,238,0.12)] sm:rounded-2xl"
           >
             <div className="pointer-events-none absolute inset-x-0 top-0 h-32 bg-gradient-to-b from-cyan-500/10 to-transparent" />
 
@@ -88,7 +88,7 @@ export default function AuthModal({
               </div>
             </div>
 
-            <div className="space-y-2 p-5">
+            <div className="space-y-2 overflow-y-auto p-5">
               {ROLE_OPTIONS.map((option) => {
                 const copy = t.auth.roles[option.role];
                 return (
@@ -121,7 +121,7 @@ export default function AuthModal({
               })}
             </div>
 
-            <div className="border-t border-slate-800 p-5">
+            <div className="shrink-0 border-t border-slate-800 p-5">
               <button
                 type="button"
                 onClick={onDemoLogin}

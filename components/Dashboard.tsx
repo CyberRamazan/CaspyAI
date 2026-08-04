@@ -9,7 +9,10 @@ import {
   type MouseEvent as ReactMouseEvent,
 } from "react";
 import dynamic from "next/dynamic";
+import Image from "next/image";
+import { Menu } from "lucide-react";
 import Sidebar from "@/components/Sidebar";
+import LanguageSwitcher from "@/components/LanguageSwitcher";
 import { DEFAULT_CONFIG } from "@/lib/constants";
 import {
   estimateAreaSqKm,
@@ -27,7 +30,7 @@ import type { AuthUser } from "@/lib/auth/types";
 function MapLoadingFallback() {
   const { t } = useI18n();
   return (
-    <div className="flex h-full min-h-[420px] flex-1 items-center justify-center bg-slate-950 text-sm text-slate-500">
+    <div className="flex h-full min-h-0 flex-1 items-center justify-center bg-slate-950 text-sm text-slate-500">
       {t.common.loadingMap}
     </div>
   );
@@ -41,7 +44,6 @@ const MapView = dynamic(() => import("@/components/MapView"), {
 const DEFAULT_SIDEBAR_WIDTH = 380;
 const MIN_SIDEBAR_WIDTH = 300;
 const MAX_SIDEBAR_WIDTH = 560;
-const COLLAPSED_WIDTH = 72;
 
 interface DashboardProps {
   user: AuthUser;
@@ -56,6 +58,7 @@ export default function Dashboard({ user, onLogout }: DashboardProps) {
   const [isGenerating, setIsGenerating] = useState(false);
   const [sidebarWidth, setSidebarWidth] = useState(DEFAULT_SIDEBAR_WIDTH);
   const [collapsed, setCollapsed] = useState(false);
+  const [mobileOpen, setMobileOpen] = useState(false);
   const [isResizing, setIsResizing] = useState(false);
   const dragStartX = useRef(0);
   const dragStartWidth = useRef(DEFAULT_SIDEBAR_WIDTH);
@@ -76,9 +79,9 @@ export default function Dashboard({ user, onLogout }: DashboardProps) {
     const next = generateEmergencyReport(config, epicenter, t);
     setReport(next);
     setIsGenerating(false);
+    setMobileOpen(false);
   }, [config, epicenter, t]);
 
-  // Re-localize an existing report when language changes
   useEffect(() => {
     if (!epicenter || !report) return;
     setReport(generateEmergencyReport(config, epicenter, t));
@@ -102,9 +105,7 @@ export default function Dashboard({ user, onLogout }: DashboardProps) {
   const handleResizeStart = useCallback(
     (e: ReactMouseEvent<HTMLDivElement>) => {
       e.preventDefault();
-      if (collapsed) {
-        setCollapsed(false);
-      }
+      if (collapsed) setCollapsed(false);
       setIsResizing(true);
       dragStartX.current = e.clientX;
       dragStartWidth.current = collapsed ? DEFAULT_SIDEBAR_WIDTH : sidebarWidth;
@@ -125,9 +126,7 @@ export default function Dashboard({ user, onLogout }: DashboardProps) {
       if (collapsed) setCollapsed(false);
     };
 
-    const onUp = () => {
-      setIsResizing(false);
-    };
+    const onUp = () => setIsResizing(false);
 
     document.body.style.cursor = "col-resize";
     document.body.style.userSelect = "none";
@@ -142,48 +141,79 @@ export default function Dashboard({ user, onLogout }: DashboardProps) {
     };
   }, [isResizing, collapsed]);
 
+  useEffect(() => {
+    if (!mobileOpen) return;
+    const prev = document.body.style.overflow;
+    document.body.style.overflow = "hidden";
+    return () => {
+      document.body.style.overflow = prev;
+    };
+  }, [mobileOpen]);
+
   return (
     <div className="flex h-dvh w-full flex-col overflow-hidden bg-slate-950 text-slate-100 md:flex-row">
-      <div className="relative flex max-md:w-full md:h-full">
-        <Sidebar
-          config={config}
-          onConfigChange={handleConfigChange}
-          onGenerate={handleGenerate}
-          isGenerating={isGenerating}
-          canGenerate={epicenter !== null}
-          report={report}
-          width={sidebarWidth}
-          collapsed={collapsed}
-          onToggleCollapse={handleToggleCollapse}
-          user={user}
-          onLogout={onLogout}
-        />
-
-        <div
-          role="separator"
-          aria-orientation="vertical"
-          aria-label={t.dashboard.resizeSidebar}
-          aria-valuenow={collapsed ? COLLAPSED_WIDTH : sidebarWidth}
-          aria-valuemin={MIN_SIDEBAR_WIDTH}
-          aria-valuemax={MAX_SIDEBAR_WIDTH}
-          onMouseDown={handleResizeStart}
-          onDoubleClick={handleToggleCollapse}
-          className={`absolute right-0 top-0 z-20 hidden h-full w-1.5 -translate-x-1/2 cursor-col-resize touch-none md:block ${
-            isResizing ? "bg-cyan-400/50" : "bg-transparent hover:bg-cyan-500/40"
-          }`}
-        >
-          <div className="absolute left-1/2 top-1/2 h-10 w-1 -translate-x-1/2 -translate-y-1/2 rounded-full bg-slate-600/80" />
+      <div className="z-[1100] flex shrink-0 items-center justify-between gap-2 border-b border-slate-800 bg-slate-950/95 px-3 py-2 backdrop-blur-md md:hidden">
+        <div className="flex min-w-0 items-center gap-2">
+          <div className="relative h-9 w-9 shrink-0 overflow-hidden rounded-full border border-cyan-500/30">
+            <Image
+              src="/logo.png"
+              alt="CaspyAI"
+              fill
+              sizes="36px"
+              className="object-cover"
+              priority
+            />
+          </div>
+          <div className="min-w-0">
+            <p className="truncate text-sm font-semibold">
+              Caspy<span className="text-emerald-400">AI</span>
+            </p>
+            <p className="truncate text-[10px] text-slate-500">
+              {t.dashboard.tagline}
+            </p>
+          </div>
+        </div>
+        <div className="flex shrink-0 items-center gap-2">
+          <LanguageSwitcher size="sm" />
+          <button
+            type="button"
+            onClick={() => setMobileOpen(true)}
+            className="inline-flex items-center gap-1.5 rounded-lg border border-cyan-500/40 bg-cyan-500/15 px-2.5 py-1.5 text-xs font-semibold text-cyan-200"
+          >
+            <Menu className="h-4 w-4" />
+            {t.common.openControls}
+          </button>
         </div>
       </div>
 
-      <MapView
-        epicenter={epicenter}
-        radiusKm={config.radiusKm}
-        onMapClick={handleMapClick}
-        activeIncidents={activeIncidents}
-        riskAreaSqKm={riskAreaSqKm}
-        ecosystemAlert={ecosystemAlert}
+      <Sidebar
+        config={config}
+        onConfigChange={handleConfigChange}
+        onGenerate={handleGenerate}
+        isGenerating={isGenerating}
+        canGenerate={epicenter !== null}
+        report={report}
+        width={sidebarWidth}
+        collapsed={collapsed}
+        onToggleCollapse={handleToggleCollapse}
+        user={user}
+        onLogout={onLogout}
+        mobileOpen={mobileOpen}
+        onMobileClose={() => setMobileOpen(false)}
+        onResizeStart={handleResizeStart}
+        isResizing={isResizing}
       />
+
+      <div className="relative min-h-0 min-w-0 flex-1">
+        <MapView
+          epicenter={epicenter}
+          radiusKm={config.radiusKm}
+          onMapClick={handleMapClick}
+          activeIncidents={activeIncidents}
+          riskAreaSqKm={riskAreaSqKm}
+          ecosystemAlert={ecosystemAlert}
+        />
+      </div>
     </div>
   );
 }

@@ -31,35 +31,63 @@ export default function MetricBar({
       key: "incidents",
       icon: Activity,
       iconClass: "text-emerald-400",
-      text: `${t.dashboard.activeIncidents}: ${activeIncidents}`,
+      label: t.dashboard.activeIncidents,
+      value: String(activeIncidents),
       cardClass: "border-slate-800/90",
     },
     {
       key: "risk",
       icon: Hexagon,
       iconClass: "text-amber-400",
-      text: `${t.dashboard.riskArea}: ${riskAreaSqKm.toLocaleString()} ${t.common.sqKm}`,
+      label: t.dashboard.riskArea,
+      value: `${riskAreaSqKm.toLocaleString()} ${t.common.sqKm}`,
       cardClass: "border-slate-800/90",
     },
     {
       key: "sea",
       icon: Waves,
       iconClass: "text-sky-400",
-      text: `${t.dashboard.seaLevel}: ${SEA_LEVEL_STATUS}`,
+      label: t.dashboard.seaLevel,
+      value: SEA_LEVEL_STATUS,
       cardClass: "border-slate-800/90",
     },
     {
       key: "alert",
       icon: AlertCircle,
       iconClass: "",
-      text: `${t.dashboard.ecosystemAlert}: ${t.ecosystemAlerts[ecosystemAlert]}`,
+      label: t.dashboard.ecosystemAlert,
+      value: t.ecosystemAlerts[ecosystemAlert],
       cardClass: alertColor(ecosystemAlert),
     },
   ];
 
   return (
-    <div className="pointer-events-none absolute left-0 right-0 top-0 z-[1000] p-3 md:p-4">
-      <div className="mx-auto grid max-w-5xl grid-cols-2 gap-2 md:grid-cols-4 md:gap-3">
+    <div className="pointer-events-none absolute inset-x-0 top-0 z-[1000] px-2 pt-2 md:p-4">
+      {/* Mobile: horizontal scroll chips */}
+      <div className="pointer-events-auto -mx-2 flex gap-2 overflow-x-auto px-2 pb-1 scrollbar-none md:hidden">
+        {metrics.map((metric) => {
+          const Icon = metric.icon;
+          return (
+            <div
+              key={metric.key}
+              className={`flex shrink-0 items-center gap-1.5 rounded-lg border bg-slate-950/85 px-2.5 py-1.5 backdrop-blur-md ${metric.cardClass}`}
+            >
+              <Icon className={`h-3.5 w-3.5 shrink-0 ${metric.iconClass}`} />
+              <div className="leading-tight">
+                <p className="text-[9px] uppercase tracking-wide text-slate-500">
+                  {metric.label}
+                </p>
+                <p className="whitespace-nowrap text-[11px] font-semibold text-slate-100">
+                  {metric.value}
+                </p>
+              </div>
+            </div>
+          );
+        })}
+      </div>
+
+      {/* Desktop: 4-column grid */}
+      <div className="mx-auto hidden max-w-5xl grid-cols-4 gap-3 md:grid">
         {metrics.map((metric) => {
           const Icon = metric.icon;
           return (
@@ -68,8 +96,8 @@ export default function MetricBar({
               className={`pointer-events-auto flex items-center gap-2 rounded-xl border bg-slate-950/75 px-3 py-2.5 backdrop-blur-md ${metric.cardClass}`}
             >
               <Icon className={`h-4 w-4 shrink-0 ${metric.iconClass}`} />
-              <p className="text-xs font-semibold leading-snug text-slate-100 md:text-sm">
-                {metric.text}
+              <p className="text-sm font-semibold leading-snug text-slate-100">
+                {metric.label}: {metric.value}
               </p>
             </div>
           );

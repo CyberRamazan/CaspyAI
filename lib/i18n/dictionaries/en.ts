@@ -9,6 +9,8 @@ export const en: Dictionary = {
     expandSidebar: "Expand sidebar",
     collapseSidebar: "Collapse sidebar",
     expandPanel: "Expand Panel",
+    openControls: "Controls",
+    closeControls: "Close",
     liveMonitoring: "Live Monitoring Active",
     km: "km",
     kmh: "km/h",

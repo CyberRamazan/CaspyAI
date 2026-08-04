@@ -61,9 +61,9 @@ export default function LandingPage({ onLaunch }: LandingPageProps) {
         />
       </div>
 
-      <header className="relative z-10 mx-auto flex w-full max-w-6xl items-center justify-between gap-3 px-6 py-5">
-        <div className="flex items-center gap-3">
-          <div className="relative h-11 w-11 overflow-hidden rounded-full border border-cyan-500/30 shadow-[0_0_24px_rgba(34,211,238,0.25)]">
+      <header className="relative z-10 mx-auto flex w-full max-w-6xl items-center justify-between gap-2 px-4 py-4 sm:gap-3 sm:px-6 sm:py-5">
+        <div className="flex min-w-0 items-center gap-2 sm:gap-3">
+          <div className="relative h-9 w-9 shrink-0 overflow-hidden rounded-full border border-cyan-500/30 shadow-[0_0_24px_rgba(34,211,238,0.25)] sm:h-11 sm:w-11">
             <Image
               src="/logo.png"
               alt="CaspyAI"
@@ -73,16 +73,16 @@ export default function LandingPage({ onLaunch }: LandingPageProps) {
               priority
             />
           </div>
-          <span className="text-lg font-semibold tracking-tight">
+          <span className="truncate text-base font-semibold tracking-tight sm:text-lg">
             Caspy<span className="text-emerald-400">AI</span>
           </span>
         </div>
-        <div className="flex items-center gap-2 sm:gap-3">
-          <LanguageSwitcher />
+        <div className="flex shrink-0 items-center gap-2">
+          <LanguageSwitcher size="sm" />
           <button
             type="button"
             onClick={onLaunch}
-            className="rounded-lg border border-slate-800 bg-slate-900/60 px-3 py-1.5 text-sm text-slate-300 transition-colors hover:border-cyan-500/40 hover:text-cyan-300"
+            className="rounded-lg border border-slate-800 bg-slate-900/60 px-2.5 py-1.5 text-xs text-slate-300 transition-colors hover:border-cyan-500/40 hover:text-cyan-300 sm:px-3 sm:text-sm"
           >
             {t.common.signIn}
           </button>
@@ -90,15 +90,15 @@ export default function LandingPage({ onLaunch }: LandingPageProps) {
       </header>
 
       <main className="relative z-10">
-        <section className="mx-auto flex min-h-[calc(100dvh-5rem)] w-full max-w-6xl flex-col justify-center px-6 pb-16 pt-6 md:pt-10">
+        <section className="mx-auto flex min-h-[calc(100dvh-4.5rem)] w-full max-w-6xl flex-col justify-center px-4 pb-12 pt-4 sm:px-6 sm:pb-16 sm:pt-6 md:pt-10">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.55, ease: "easeOut" }}
             className="max-w-3xl"
           >
-            <div className="mb-8 flex flex-wrap items-center gap-4">
-              <div className="relative h-24 w-24 overflow-hidden rounded-full border border-cyan-500/40 shadow-[0_0_48px_rgba(34,211,238,0.35)] md:h-28 md:w-28">
+            <div className="mb-6 flex flex-wrap items-center gap-3 sm:mb-8 sm:gap-4">
+              <div className="relative h-20 w-20 overflow-hidden rounded-full border border-cyan-500/40 shadow-[0_0_48px_rgba(34,211,238,0.35)] sm:h-24 sm:w-24 md:h-28 md:w-28">
                 <Image
                   src="/logo.png"
                   alt="CaspyAI emblem"
@@ -119,10 +119,10 @@ export default function LandingPage({ onLaunch }: LandingPageProps) {
               </div>
             </div>
 
-            <h1 className="text-5xl font-bold tracking-tight text-slate-50 md:text-7xl">
+            <h1 className="text-4xl font-bold tracking-tight text-slate-50 sm:text-5xl md:text-7xl">
               Caspy<span className="text-emerald-400">AI</span>
             </h1>
-            <p className="mt-5 max-w-2xl text-lg leading-relaxed text-slate-300 md:text-xl">
+            <p className="mt-4 max-w-2xl text-base leading-relaxed text-slate-300 sm:mt-5 sm:text-lg md:text-xl">
               {t.landing.subtitle}
             </p>
 
@@ -131,7 +131,7 @@ export default function LandingPage({ onLaunch }: LandingPageProps) {
               onClick={onLaunch}
               whileHover={{ scale: 1.02 }}
               whileTap={{ scale: 0.98 }}
-              className="mt-8 inline-flex items-center gap-2 rounded-xl border border-cyan-500/40 bg-cyan-500/15 px-6 py-3.5 text-base font-semibold text-cyan-200 shadow-[0_0_32px_rgba(34,211,238,0.2)] transition-colors hover:bg-cyan-500/25"
+              className="mt-6 inline-flex w-full items-center justify-center gap-2 rounded-xl border border-cyan-500/40 bg-cyan-500/15 px-5 py-3.5 text-sm font-semibold text-cyan-200 shadow-[0_0_32px_rgba(34,211,238,0.2)] transition-colors hover:bg-cyan-500/25 sm:mt-8 sm:w-auto sm:px-6 sm:text-base"
             >
               {t.landing.launchCta}
               <ArrowRight className="h-5 w-5" />
@@ -142,7 +142,7 @@ export default function LandingPage({ onLaunch }: LandingPageProps) {
             initial={{ opacity: 0, y: 24 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.55, delay: 0.15, ease: "easeOut" }}
-            className="mt-16 grid gap-8 border-t border-slate-800/80 pt-10 md:grid-cols-3"
+            className="mt-12 grid gap-6 border-t border-slate-800/80 pt-8 sm:mt-16 sm:gap-8 sm:pt-10 md:grid-cols-3"
           >
             {features.map((feature, index) => {
               const Icon = feature.icon;

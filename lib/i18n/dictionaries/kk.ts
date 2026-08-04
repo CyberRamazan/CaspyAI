@@ -9,6 +9,8 @@ export const kk: Dictionary = {
     expandSidebar: "Мәзірді кеңейту",
     collapseSidebar: "Мәзірді жию",
     expandPanel: "Панельді кеңейту",
+    openControls: "Басқару",
+    closeControls: "Жабу",
     liveMonitoring: "Мониторинг белсенді",
     km: "км",
     kmh: "км/сағ",
