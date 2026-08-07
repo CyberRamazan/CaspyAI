@@ -173,9 +173,9 @@ Set `ANTHROPIC_API_KEY` in your Vercel project environment variables for AI repo
 | Name | Role |
 | :--- | :--- |
 | Ramazan Nurbergen | Product Manager |
-| Tansholpan Abdipaiyz | DevOps Engineer |
+| Tansholpan Abdipaiyz | Data Analyst |
 | Bektursyn Zhukeshbayev | Full-stack Developer |
-| Assiya Nurbergen | UI/UX Designer & Presenter |
-| Milana Yergaliyeva | Product Analyst & Presenter |
+| Assiya Nurbergen | QA Engineer |
+| Milana Yergaliyeva | UX/UI Designer |
 
 *Caspian Hackathon 2026*
