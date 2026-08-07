@@ -1,4 +1,9 @@
 import { area, circle } from "@turf/turf";
+import { getDictionary } from "@/lib/i18n/dictionaries";
+import {
+  findNearestRegion,
+  formatRegionLabel,
+} from "@/lib/caspianRegions";
 import type { Dictionary } from "@/lib/i18n/types";
 import type {
   EcosystemAlert,
@@ -8,7 +13,10 @@ import type {
   SeverityLevel,
 } from "./types";
 
-function computeAffectedAreaSqKm(point: LatLngPoint, radiusKm: number): number {
+export function computeAffectedAreaSqKm(
+  point: LatLngPoint,
+  radiusKm: number
+): number {
   const poly = circle([point.lng, point.lat], radiusKm, {
     steps: 64,
     units: "kilometers",
@@ -16,7 +24,7 @@ function computeAffectedAreaSqKm(point: LatLngPoint, radiusKm: number): number {
   return Math.round((area(poly) / 1_000_000) * 10) / 10;
 }
 
-function computeSeverity(config: IncidentConfig): SeverityLevel {
+export function computeSeverity(config: IncidentConfig): SeverityLevel {
   const { type, radiusKm, windSpeedKmh } = config;
   let score = 0;
 
@@ -36,7 +44,9 @@ function computeSeverity(config: IncidentConfig): SeverityLevel {
   return "MODERATE RISK";
 }
 
-function ecosystemFromSeverity(severity: SeverityLevel): EcosystemAlert {
+export function ecosystemFromSeverity(
+  severity: SeverityLevel
+): EcosystemAlert {
   if (severity === "CRITICAL HAZARD") return "Rose";
   if (severity === "HIGH ALERT") return "Amber";
   return "Emerald";
@@ -88,7 +98,12 @@ function buildOperationalReport(
     t.report.briefTitle,
     "",
     t.report.toLine,
-    t.report.subject(severityLabel, typeLabel),
+    t.report.subject(
+      severityLabel,
+      typeLabel,
+      point.lat.toFixed(4),
+      point.lng.toFixed(4)
+    ),
     "",
     t.report.coordinates(
       point.lat.toFixed(4),
@@ -110,10 +125,12 @@ export function generateEmergencyReport(
 ): EmergencyReport {
   const severity = computeSeverity(config);
   const affectedAreaSqKm = computeAffectedAreaSqKm(point, config.radiusKm);
+  const regionName = formatRegionLabel(findNearestRegion(point));
 
   return {
     severity,
     affectedAreaSqKm,
+    regionName,
     operationalReport: buildOperationalReport(
       config,
       point,
@@ -125,9 +142,41 @@ export function generateEmergencyReport(
     sealProtectionSteps: sealProtectionSteps(config, t.report),
     ecosystemAlert: ecosystemFromSeverity(severity),
     generatedAt: new Date().toISOString(),
+    source: "template",
   };
 }
 
 export function estimateAreaSqKm(radiusKm: number): number {
   return Math.round(Math.PI * radiusKm * radiusKm * 10) / 10;
+}
+
+export function buildReportBaseline(
+  config: IncidentConfig,
+  point: LatLngPoint
+): Pick<
+  EmergencyReport,
+  "severity" | "affectedAreaSqKm" | "ecosystemAlert" | "generatedAt"
+> {
+  const severity = computeSeverity(config);
+  return {
+    severity,
+    affectedAreaSqKm: computeAffectedAreaSqKm(point, config.radiusKm),
+    ecosystemAlert: ecosystemFromSeverity(severity),
+    generatedAt: new Date().toISOString(),
+  };
+}
+
+export function buildReportShell(
+  config: IncidentConfig,
+  point: LatLngPoint
+): EmergencyReport {
+  const regionName = formatRegionLabel(findNearestRegion(point));
+  return {
+    ...buildReportBaseline(config, point),
+    regionName,
+    operationalReport: "",
+    containmentResources: [],
+    sealProtectionSteps: [],
+    source: "ai",
+  };
 }

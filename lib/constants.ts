@@ -1,7 +1,8 @@
-import type { IncidentConfig, MapMarkerDef } from "./types";
+import type { IncidentConfig } from "./types";
 
-export const AKTAU_CENTER: [number, number] = [43.65, 51.15];
-export const DEFAULT_ZOOM = 7;
+/** Center of the Caspian Sea — not tied to any single city */
+export const CASPIAN_CENTER: [number, number] = [42.0, 52.0];
+export const DEFAULT_ZOOM = 6;
 
 export const DEFAULT_CONFIG: IncidentConfig = {
   type: "oil_spill",
@@ -10,21 +11,8 @@ export const DEFAULT_CONFIG: IncidentConfig = {
   windDirection: "N",
 };
 
-export const MAP_MARKERS: Omit<MapMarkerDef, "name" | "description">[] = [
-  {
-    id: "aktau-port",
-    position: [43.606, 51.229],
-  },
-  {
-    id: "seal-habitat",
-    position: [44.0, 50.5],
-  },
-  {
-    id: "kashagan",
-    position: [46.3, 51.9],
-  },
-];
-
 export const SEA_LEVEL_STATUS = "-28.5m";
 
 export const WIND_DIRECTIONS = ["N", "S", "E", "W"] as const;
+
+/** Map markers are stored in data/caspian-markers.json */

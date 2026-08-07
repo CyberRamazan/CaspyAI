@@ -16,7 +16,7 @@ const geistMono = Geist_Mono({
 const siteUrl = "https://caspy-ai.vercel.app";
 const title = "CaspyAI — Caspian Ecological Emergency Response";
 const description =
-  "Real-time ecological incident monitoring and emergency AI reporting for the Caspian Sea, Aktau, and Mangystau coastal region.";
+  "Real-time ecological incident monitoring and AI-powered emergency reporting across the Caspian Sea.";
 
 export const metadata: Metadata = {
   metadataBase: new URL(siteUrl),

@@ -81,6 +81,11 @@ export interface Dictionary {
     seaLevel: string;
     ecosystemAlert: string;
     resizeSidebar: string;
+    aiGenerated: string;
+    templateFallback: string;
+    aiAnalyzing: string;
+    reportFallbackNotice: string;
+    detectedRegion: string;
   };
   incidentTypes: Record<IncidentType, string>;
   severity: Record<SeverityLevel, string>;
@@ -93,7 +98,12 @@ export interface Dictionary {
   report: {
     briefTitle: string;
     toLine: string;
-    subject: (severity: string, typeLabel: string) => string;
+    subject: (
+      severity: string,
+      typeLabel: string,
+      lat: string,
+      lng: string
+    ) => string;
     coordinates: (
       lat: string,
       lng: string,

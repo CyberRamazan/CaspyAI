@@ -18,8 +18,13 @@ import {
   estimateAreaSqKm,
   generateEmergencyReport,
 } from "@/lib/reportGenerator";
+import { mergeReportLists } from "@/lib/reportTool";
+import { fetchAllMapMarkers } from "@/lib/fetchMarkers";
+import { filterMarkersNear } from "@/lib/markerUtils";
+import { streamEmergencyReport } from "@/lib/reportStream";
 import { useI18n } from "@/lib/i18n/I18nContext";
 import type {
+  DiscoveredAsset,
   EcosystemAlert,
   EmergencyReport,
   IncidentConfig,
@@ -55,6 +60,11 @@ export default function Dashboard({ user, onLogout }: DashboardProps) {
   const [config, setConfig] = useState<IncidentConfig>(DEFAULT_CONFIG);
   const [epicenter, setEpicenter] = useState<LatLngPoint | null>(null);
   const [report, setReport] = useState<EmergencyReport | null>(null);
+  const [reportFallbackNotice, setReportFallbackNotice] = useState<string | null>(
+    null
+  );
+  const [mapMarkers, setMapMarkers] = useState<DiscoveredAsset[]>([]);
+  const [allMapMarkers, setAllMapMarkers] = useState<DiscoveredAsset[]>([]);
   const [isGenerating, setIsGenerating] = useState(false);
   const [sidebarWidth, setSidebarWidth] = useState(DEFAULT_SIDEBAR_WIDTH);
   const [collapsed, setCollapsed] = useState(false);
@@ -62,6 +72,21 @@ export default function Dashboard({ user, onLogout }: DashboardProps) {
   const [isResizing, setIsResizing] = useState(false);
   const dragStartX = useRef(0);
   const dragStartWidth = useRef(DEFAULT_SIDEBAR_WIDTH);
+  const generateAbortRef = useRef<AbortController | null>(null);
+
+  useEffect(() => {
+    fetchAllMapMarkers()
+      .then(setAllMapMarkers)
+      .catch(() => setAllMapMarkers([]));
+  }, []);
+
+  useEffect(() => {
+    if (!epicenter) {
+      setMapMarkers(allMapMarkers);
+      return;
+    }
+    setMapMarkers(filterMarkersNear(epicenter, allMapMarkers, 150));
+  }, [epicenter, allMapMarkers]);
 
   const riskAreaSqKm = useMemo(() => {
     if (report) return report.affectedAreaSqKm;
@@ -74,28 +99,71 @@ export default function Dashboard({ user, onLogout }: DashboardProps) {
 
   const handleGenerate = useCallback(async () => {
     if (!epicenter) return;
+
+    generateAbortRef.current?.abort();
+    const controller = new AbortController();
+    generateAbortRef.current = controller;
+
     setIsGenerating(true);
-    await new Promise((resolve) => setTimeout(resolve, 800));
-    const next = generateEmergencyReport(config, epicenter, t);
-    setReport(next);
-    setIsGenerating(false);
-    setMobileOpen(false);
-  }, [config, epicenter, t]);
+    setReport(null);
+    setReportFallbackNotice(null);
+
+    try {
+      await streamEmergencyReport({
+        config,
+        epicenter,
+        locale,
+        signal: controller.signal,
+        onBaseline: (shell) => {
+          setReport(shell);
+        },
+        onText: (text) => {
+          setReport((prev) => (prev ? { ...prev, operationalReport: text } : prev));
+        },
+        onLists: (partial) => {
+          setReport((prev) => (prev ? mergeReportLists(prev, partial) : prev));
+        },
+        onComplete: (next) => {
+          setReport(next);
+        },
+      });
+      setMobileOpen(false);
+    } catch (error) {
+      if (controller.signal.aborted) return;
+      setReport(generateEmergencyReport(config, epicenter, t));
+      const detail =
+        error instanceof Error ? error.message : t.dashboard.reportFallbackNotice;
+      setReportFallbackNotice(
+        detail.includes("ANTHROPIC_API_KEY")
+          ? t.dashboard.reportFallbackNotice
+          : `${t.dashboard.reportFallbackNotice} ${detail}`
+      );
+    } finally {
+      if (generateAbortRef.current === controller) {
+        generateAbortRef.current = null;
+      }
+      setIsGenerating(false);
+    }
+  }, [config, epicenter, locale, t]);
 
   useEffect(() => {
-    if (!epicenter || !report) return;
-    setReport(generateEmergencyReport(config, epicenter, t));
-    // eslint-disable-next-line react-hooks/exhaustive-deps -- only refresh copy on locale change
-  }, [locale]);
+    return () => {
+      generateAbortRef.current?.abort();
+    };
+  }, []);
 
   const handleMapClick = useCallback((point: LatLngPoint) => {
+    generateAbortRef.current?.abort();
     setEpicenter(point);
     setReport(null);
+    setReportFallbackNotice(null);
   }, []);
 
   const handleConfigChange = useCallback((next: IncidentConfig) => {
+    generateAbortRef.current?.abort();
     setConfig(next);
     setReport(null);
+    setReportFallbackNotice(null);
   }, []);
 
   const handleToggleCollapse = useCallback(() => {
@@ -193,6 +261,7 @@ export default function Dashboard({ user, onLogout }: DashboardProps) {
         isGenerating={isGenerating}
         canGenerate={epicenter !== null}
         report={report}
+        reportFallbackNotice={reportFallbackNotice}
         width={sidebarWidth}
         collapsed={collapsed}
         onToggleCollapse={handleToggleCollapse}
@@ -212,6 +281,7 @@ export default function Dashboard({ user, onLogout }: DashboardProps) {
           activeIncidents={activeIncidents}
           riskAreaSqKm={riskAreaSqKm}
           ecosystemAlert={ecosystemAlert}
+          markers={mapMarkers}
         />
       </div>
     </div>

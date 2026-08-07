@@ -14,9 +14,8 @@ import L from "leaflet";
 import "leaflet/dist/leaflet.css";
 import HazardZone from "@/components/HazardZone";
 import MetricBar from "@/components/MetricBar";
-import { AKTAU_CENTER, DEFAULT_ZOOM, MAP_MARKERS } from "@/lib/constants";
-import { useI18n } from "@/lib/i18n/I18nContext";
-import type { EcosystemAlert, LatLngPoint } from "@/lib/types";
+import { CASPIAN_CENTER, DEFAULT_ZOOM } from "@/lib/constants";
+import type { DiscoveredAsset, EcosystemAlert, LatLngPoint } from "@/lib/types";
 
 interface MapViewProps {
   epicenter: LatLngPoint | null;
@@ -25,6 +24,7 @@ interface MapViewProps {
   activeIncidents: number;
   riskAreaSqKm: number;
   ecosystemAlert: EcosystemAlert;
+  markers?: DiscoveredAsset[];
 }
 
 function MapClickHandler({
@@ -54,6 +54,16 @@ function MapResizeFix() {
   return null;
 }
 
+function FlyToEpicenter({ epicenter }: { epicenter: LatLngPoint | null }) {
+  const map = useMap();
+  useEffect(() => {
+    if (epicenter) {
+      map.flyTo([epicenter.lat, epicenter.lng], 8, { duration: 0.8 });
+    }
+  }, [epicenter, map]);
+  return null;
+}
+
 function fixLeafletIcons() {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   delete (L.Icon.Default.prototype as any)._getIconUrl;
@@ -67,12 +77,6 @@ function fixLeafletIcons() {
   });
 }
 
-const MARKER_COPY_KEY = {
-  "aktau-port": "aktauPort",
-  "seal-habitat": "sealHabitat",
-  kashagan: "kashagan",
-} as const;
-
 export default function MapView({
   epicenter,
   radiusKm,
@@ -80,9 +84,8 @@ export default function MapView({
   activeIncidents,
   riskAreaSqKm,
   ecosystemAlert,
+  markers = [],
 }: MapViewProps) {
-  const { t } = useI18n();
-
   useEffect(() => {
     fixLeafletIcons();
   }, []);
@@ -95,7 +98,7 @@ export default function MapView({
         ecosystemAlert={ecosystemAlert}
       />
       <MapContainer
-        center={AKTAU_CENTER}
+        center={CASPIAN_CENTER}
         zoom={DEFAULT_ZOOM}
         className="h-full w-full"
         zoomControl={false}
@@ -107,21 +110,18 @@ export default function MapView({
         />
         <ZoomControl position="bottomright" />
         <MapResizeFix />
+        <FlyToEpicenter epicenter={epicenter} />
         <MapClickHandler onMapClick={onMapClick} />
         {epicenter && <HazardZone center={epicenter} radiusKm={radiusKm} />}
-        {MAP_MARKERS.map((marker) => {
-          const key = MARKER_COPY_KEY[marker.id as keyof typeof MARKER_COPY_KEY];
-          const copy = t.markers[key];
-          return (
-            <Marker key={marker.id} position={marker.position}>
-              <Popup>
-                <strong>{copy.name}</strong>
-                <br />
-                {copy.description}
-              </Popup>
-            </Marker>
-          );
-        })}
+        {markers.map((asset) => (
+          <Marker key={asset.id} position={[asset.lat, asset.lng]}>
+            <Popup>
+              <strong>{asset.name}</strong>
+              <br />
+              {asset.description}
+            </Popup>
+          </Marker>
+        ))}
       </MapContainer>
     </div>
   );

@@ -18,6 +18,7 @@ interface SidebarProps {
   isGenerating: boolean;
   canGenerate: boolean;
   report: EmergencyReport | null;
+  reportFallbackNotice?: string | null;
   width: number;
   collapsed: boolean;
   onToggleCollapse: () => void;
@@ -36,6 +37,7 @@ export default function Sidebar({
   isGenerating,
   canGenerate,
   report,
+  reportFallbackNotice = null,
   width,
   collapsed,
   onToggleCollapse,
@@ -158,7 +160,11 @@ export default function Sidebar({
             isGenerating={isGenerating}
             canGenerate={canGenerate}
           />
-          <AIOutputCard report={report} />
+          <AIOutputCard
+            report={report}
+            isGenerating={isGenerating}
+            fallbackNotice={reportFallbackNotice}
+          />
         </div>
 
         {collapsed && (

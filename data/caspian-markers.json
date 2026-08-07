@@ -1,0 +1,214 @@
+{
+  "markers": [
+    {
+      "id": "marker-0-port-of-aktau",
+      "name": "Port of Aktau",
+      "lat": 43.6508,
+      "lng": 51.1726,
+      "description": "Kazakhstan's principal Caspian seaport and gateway for trans-Caspian oil exports"
+    },
+    {
+      "id": "marker-1-port-of-atyrau",
+      "name": "Port of Atyrau",
+      "lat": 47.1164,
+      "lng": 51.8826,
+      "description": "Major river port near the Ural River delta, key oil industry hub in Kazakhstan"
+    },
+    {
+      "id": "marker-2-kashagan-oil-field",
+      "name": "Kashagan Oil Field",
+      "lat": 45,
+      "lng": 51.5,
+      "description": "One of the world's largest offshore oil discoveries, northeast Caspian shelf"
+    },
+    {
+      "id": "marker-3-tengiz-oil-field",
+      "name": "Tengiz Oil Field",
+      "lat": 45.4167,
+      "lng": 53.75,
+      "description": "Giant onshore oil field in Kazakhstan near the northeastern Caspian coast"
+    },
+    {
+      "id": "marker-4-port-of-kuryk",
+      "name": "Port of Kuryk",
+      "lat": 43.2194,
+      "lng": 51.6556,
+      "description": "Modern Kazakhstan port terminal for ferry and cargo operations"
+    },
+    {
+      "id": "marker-5-port-of-astrakhan",
+      "name": "Port of Astrakhan",
+      "lat": 46.3497,
+      "lng": 48.0408,
+      "description": "Russia's major Caspian port on the Volga Delta, vital for shipping and fisheries"
+    },
+    {
+      "id": "marker-6-volga-river-delta",
+      "name": "Volga River Delta",
+      "lat": 45.75,
+      "lng": 48.5,
+      "description": "Ramsar wetland critical for sturgeon spawning and migratory bird habitat"
+    },
+    {
+      "id": "marker-7-port-of-makhachkala",
+      "name": "Port of Makhachkala",
+      "lat": 42.9849,
+      "lng": 47.5047,
+      "description": "Russia's largest seaport on the Caspian in Dagestan, key trade and oil terminal"
+    },
+    {
+      "id": "marker-8-dagestan-nature-reserve",
+      "name": "Dagestan Nature Reserve",
+      "lat": 43.8833,
+      "lng": 46.5833,
+      "description": "Protected coastal wetland in Russia, important for Caspian seal and waterfowl"
+    },
+    {
+      "id": "marker-9-port-of-derbent",
+      "name": "Port of Derbent",
+      "lat": 42.0667,
+      "lng": 48.2833,
+      "description": "Historic Russian port city, ancient trading hub on the western Caspian shore"
+    },
+    {
+      "id": "marker-10-port-of-baku",
+      "name": "Port of Baku",
+      "lat": 40.3656,
+      "lng": 49.835,
+      "description": "Azerbaijan's capital and largest Caspian port, center of oil and gas industry"
+    },
+    {
+      "id": "marker-11-azeri-chirag-gunashli-acg-field",
+      "name": "Azeri-Chirag-Gunashli (ACG) Field",
+      "lat": 40.25,
+      "lng": 50.5,
+      "description": "Major offshore oil complex operated by BP, Azerbaijan's largest oil production site"
+    },
+    {
+      "id": "marker-12-shah-deniz-gas-field",
+      "name": "Shah Deniz Gas Field",
+      "lat": 39.75,
+      "lng": 50.5833,
+      "description": "Giant offshore natural gas field southeast of Baku, feeds Southern Gas Corridor"
+    },
+    {
+      "id": "marker-13-sangachal-terminal",
+      "name": "Sangachal Terminal",
+      "lat": 40.3167,
+      "lng": 49.6667,
+      "description": "Azerbaijan's main oil and gas processing facility south of Baku"
+    },
+    {
+      "id": "marker-14-absheron-national-park",
+      "name": "Absheron National Park",
+      "lat": 40.45,
+      "lng": 50.25,
+      "description": "Coastal protected area near Baku for endemic flora and Caspian seal habitat"
+    },
+    {
+      "id": "marker-15-port-of-turkmenbashi",
+      "name": "Port of Turkmenbashi",
+      "lat": 40.0289,
+      "lng": 52.9994,
+      "description": "Turkmenistan's largest seaport, major oil refining and export terminal"
+    },
+    {
+      "id": "marker-16-cheleken-peninsula",
+      "name": "Cheleken Peninsula",
+      "lat": 39.45,
+      "lng": 53.15,
+      "description": "Historic oil production area in Turkmenistan, offshore exploration zone"
+    },
+    {
+      "id": "marker-17-hazar-nature-reserve",
+      "name": "Hazar Nature Reserve",
+      "lat": 41.85,
+      "lng": 53.5,
+      "description": "Protected Turkmen coastal reserve for Caspian seal haul-outs and breeding"
+    },
+    {
+      "id": "marker-18-port-of-bandar-anzali",
+      "name": "Port of Bandar Anzali",
+      "lat": 37.4667,
+      "lng": 49.4667,
+      "description": "Iran's principal Caspian port in Gilan Province, vital for trade and fishing"
+    },
+    {
+      "id": "marker-19-port-of-bandar-torkaman",
+      "name": "Port of Bandar Torkaman",
+      "lat": 36.9,
+      "lng": 54.0667,
+      "description": "Major Iranian fishing port and commercial harbor in Golestan Province"
+    },
+    {
+      "id": "marker-20-port-of-noshahr",
+      "name": "Port of Noshahr",
+      "lat": 36.65,
+      "lng": 51.5,
+      "description": "Important Iranian port for cargo and ferry connections in Mazandaran Province"
+    },
+    {
+      "id": "marker-21-anzali-wetland",
+      "name": "Anzali Wetland",
+      "lat": 37.4333,
+      "lng": 49.3667,
+      "description": "Ramsar site lagoon complex critical for migratory birds and sturgeon nursery"
+    },
+    {
+      "id": "marker-22-miankaleh-peninsula",
+      "name": "Miankaleh Peninsula",
+      "lat": 36.8,
+      "lng": 53.5,
+      "description": "UNESCO Biosphere Reserve, vital habitat for waterfowl and Caspian seal"
+    },
+    {
+      "id": "marker-23-gorgan-bay",
+      "name": "Gorgan Bay",
+      "lat": 36.95,
+      "lng": 53.95,
+      "description": "Shallow coastal lagoon in Iran, important for fish spawning and bird migration"
+    },
+    {
+      "id": "marker-24-ural-river-delta",
+      "name": "Ural River Delta",
+      "lat": 46.8833,
+      "lng": 51.8333,
+      "description": "Critical sturgeon spawning habitat at Kazakhstan-Russia border, major wetland"
+    },
+    {
+      "id": "marker-25-tyuleniy-island",
+      "name": "Tyuleniy Island",
+      "lat": 44.5,
+      "lng": 47.5,
+      "description": "Primary Caspian seal breeding colony in Kazakhstan waters, protected reserve"
+    },
+    {
+      "id": "marker-26-ogurja-ada-island",
+      "name": "Ogurja Ada Island",
+      "lat": 39.0833,
+      "lng": 53.8333,
+      "description": "Remote Turkmen island, critical Caspian seal haul-out and nesting seabird site"
+    },
+    {
+      "id": "marker-27-kara-bogaz-gol-bay",
+      "name": "Kara-Bogaz-Gol Bay",
+      "lat": 41,
+      "lng": 53.5,
+      "description": "Unique hypersaline lagoon in Turkmenistan, mineral extraction and ecological zone"
+    },
+    {
+      "id": "marker-28-kirov-bay",
+      "name": "Kirov Bay",
+      "lat": 44.25,
+      "lng": 50.5,
+      "description": "Shallow northern Caspian bay in Kazakhstan, important for fish spawning"
+    },
+    {
+      "id": "marker-29-port-of-lagan",
+      "name": "Port of Lagan",
+      "lat": 45.4,
+      "lng": 47.35,
+      "description": "Russian fishing port in Kalmykia, gateway to northern Caspian fisheries"
+    }
+  ]
+}

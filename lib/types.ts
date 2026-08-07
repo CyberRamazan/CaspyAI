@@ -18,14 +18,26 @@ export interface IncidentConfig {
   windDirection: WindDirection;
 }
 
+export type ReportSource = "ai" | "template";
+
+export interface DiscoveredAsset {
+  id: string;
+  name: string;
+  lat: number;
+  lng: number;
+  description: string;
+}
+
 export interface EmergencyReport {
   severity: SeverityLevel;
   affectedAreaSqKm: number;
+  regionName: string;
   operationalReport: string;
   containmentResources: string[];
   sealProtectionSteps: string[];
   ecosystemAlert: EcosystemAlert;
   generatedAt: string;
+  source: ReportSource;
 }
 
 export interface MapMarkerDef {

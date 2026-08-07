@@ -95,6 +95,12 @@ export const en: Dictionary = {
     seaLevel: "Sea Level Status",
     ecosystemAlert: "Ecosystem Alert",
     resizeSidebar: "Resize sidebar",
+    aiGenerated: "Claude analysis",
+    templateFallback: "Template fallback",
+    aiAnalyzing: "Identifying nearby ports, infrastructure, and habitats for this location…",
+    reportFallbackNotice:
+      "AI unavailable — showing template report.",
+    detectedRegion: "Detected region",
   },
   incidentTypes: {
     oil_spill: "Oil Spill",
@@ -130,9 +136,9 @@ export const en: Dictionary = {
   report: {
     briefTitle: "EMERGENCY OPERATIONAL BRIEF — CaspyAI Automated Assessment",
     toLine:
-      "To: Department of Emergency Situations (DCHS), Mangystau Region; Ministry of Ecology and Natural Resources of the Republic of Kazakhstan",
-    subject: (severity, typeLabel) =>
-      `Subject: ${severity} — ${typeLabel} near Aktau / Caspian coastal zone`,
+      "To: Regional Department of Emergency Situations (DCHS); Ministry of Ecology and Natural Resources of the Republic of Kazakhstan",
+    subject: (severity, typeLabel, lat, lng) =>
+      `Subject: ${severity} — ${typeLabel} at ${lat}°N, ${lng}°E (Caspian Sea)`,
     coordinates: (lat, lng, radiusKm, area) =>
       `Incident coordinates: ${lat}°N, ${lng}°E. Estimated spread radius: ${radiusKm} km. Modelled affected marine/coastal area: ${area} km².`,
     driftHigh: (dir, speed) =>
@@ -140,9 +146,9 @@ export const en: Dictionary = {
     driftLow: (dir, speed) =>
       `Moderate winds from the ${dir} at ${speed} km/h suggest manageable drift; maintain standard boom geometry.`,
     objectives:
-      "Immediate objectives: (1) confirm source and trajectory, (2) deploy containment assets from Aktau Port, (3) protect Caspian seal habitat sectors, (4) establish public safety and fisheries advisories for Mangystau coastal waters.",
+      "Immediate objectives: (1) confirm source and trajectory, (2) deploy containment assets from the nearest port, (3) protect threatened habitats and coastal communities, (4) establish public safety and fisheries advisories for affected waters.",
     command:
-      "Recommended command posture: activate regional incident command under DCHS with Ministry of Ecology environmental liaison. Stage logistics at Aktau Port; coordinate offshore awareness with operators near Kashagan where trajectories may intersect shipping lanes. Reassess within 2 hours as wind and sea-state update.",
+      "Recommended command posture: activate regional incident command under local DCHS with Ministry of Ecology environmental liaison. Stage logistics at the nearest port; coordinate with nearby offshore operators where trajectories may intersect shipping lanes. Reassess within 2 hours as wind and sea-state update.",
     resources: {
       oil: (boomKm, sorbentTons) => [
         `${boomKm} km of offshore containment booms`,

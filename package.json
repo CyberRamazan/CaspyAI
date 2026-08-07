@@ -6,9 +6,11 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "eslint"
+    "lint": "eslint",
+    "seed:markers": "node --env-file=.env scripts/seed-markers.mjs"
   },
   "dependencies": {
+    "@anthropic-ai/sdk": "^0.115.0",
     "@turf/turf": "^7.4.0",
     "@types/leaflet": "^1.9.22",
     "framer-motion": "^12.43.0",
